@@ -47,6 +47,14 @@ Copy from your local `.env`, at minimum:
 | `RESEND_API_KEY` | `re_...` |
 | `EMAIL_FROM` | `OMJ Apartment <bookings@yourdomain.com>` |
 | `HOST_EMAIL` | inbox for bookings |
+| `BLOB_READ_WRITE_TOKEN` | from Vercel **Storage → Blob** (for admin photo uploads) |
+
+### Enable listing photo uploads
+
+1. Vercel → project → **Storage** → **Create Database** / **Blob** → create a Blob store  
+2. Connect it to this project (Production + Preview) — Vercel adds `BLOB_READ_WRITE_TOKEN`  
+3. Redeploy  
+4. In **Admin → Properties**, use **Upload photos**
 
 ## 4. Deploy
 

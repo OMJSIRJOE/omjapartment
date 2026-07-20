@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "drive.google.com" },
       { protocol: "https", hostname: "firebasestorage.googleapis.com" },
       { protocol: "https", hostname: "cdn.sanity.io" },
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
     ],
   },
   eslint: {
