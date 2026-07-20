@@ -240,7 +240,7 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
         {images.length > 0 ? (
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {images.map((url, index) => (
-              <li key={`${url}-${index}`} className="border border-navy/10 bg-cream/40 p-2">
+              <li key={`${url}-${index}`} className="border border-navy/10 bg-navy/[0.03] p-2">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={url} alt={`Listing photo ${index + 1}`} className="h-36 w-full object-cover" />
                 <div className="mt-2 flex items-center justify-between gap-2 text-xs">
