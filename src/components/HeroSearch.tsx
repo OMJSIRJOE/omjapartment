@@ -32,10 +32,10 @@ export default function HeroSearch({ locations = [] }: { locations?: string[] })
   return (
     <form
       onSubmit={onSubmit}
-      className="animate-fade-up-delay-2 w-full max-w-5xl border border-white/20 bg-white/95 p-3 shadow-[0_20px_60px_rgba(10,10,10,0.35)] backdrop-blur-sm md:p-4"
+      className="animate-fade-up-delay-2 w-full max-w-5xl overflow-hidden border border-white/20 bg-white/95 p-3 shadow-[0_20px_60px_rgba(10,10,10,0.35)] backdrop-blur-sm md:p-4"
     >
-      <div className="grid gap-3 md:grid-cols-[1.2fr_1fr_1fr_0.8fr_auto]">
-        <label className="block">
+      <div className="grid min-w-0 gap-3 md:grid-cols-[1.2fr_1fr_1fr_0.8fr_auto]">
+        <label className="block min-w-0">
           <span className="mb-1.5 block text-[10px] tracking-[0.18em] text-navy/50 uppercase">
             Location
           </span>
@@ -53,7 +53,7 @@ export default function HeroSearch({ locations = [] }: { locations?: string[] })
           </select>
         </label>
 
-        <label className="block">
+        <label className="block w-full min-w-0 overflow-hidden">
           <span className="mb-1.5 block text-[10px] tracking-[0.18em] text-navy/50 uppercase">
             Check-in
           </span>
@@ -66,7 +66,7 @@ export default function HeroSearch({ locations = [] }: { locations?: string[] })
           />
         </label>
 
-        <label className="block">
+        <label className="block w-full min-w-0 overflow-hidden">
           <span className="mb-1.5 block text-[10px] tracking-[0.18em] text-navy/50 uppercase">
             Check-out
           </span>
@@ -79,7 +79,7 @@ export default function HeroSearch({ locations = [] }: { locations?: string[] })
           />
         </label>
 
-        <label className="block">
+        <label className="block min-w-0">
           <span className="mb-1.5 block text-[10px] tracking-[0.18em] text-navy/50 uppercase">
             Guests
           </span>

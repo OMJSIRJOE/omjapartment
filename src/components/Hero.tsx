@@ -31,7 +31,7 @@ export default async function Hero() {
           </p>
         </div>
 
-        <div className="mt-10 md:mt-12">
+        <div className="mt-10 w-full min-w-0 md:mt-12">
           <HeroSearch locations={locations} />
         </div>
       </div>

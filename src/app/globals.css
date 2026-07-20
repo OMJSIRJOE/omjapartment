@@ -110,7 +110,10 @@ body {
 }
 
 .field {
+  box-sizing: border-box;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   border: 1px solid rgba(10, 10, 10, 0.15);
   background: var(--white);
   color: var(--navy);
@@ -125,6 +128,34 @@ body {
 .field:focus {
   border-color: var(--gold);
   box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18);
+}
+
+/* iOS Safari date inputs ignore width:100% unless intrinsic min-width is killed */
+input[type="date"].field {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+input[type="date"].field::-webkit-date-and-time-value {
+  text-align: left;
+  min-width: 0;
+}
+
+input[type="date"].field::-webkit-datetime-edit {
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 0;
+}
+
+input[type="date"].field::-webkit-calendar-picker-indicator {
+  margin-left: 0;
+  flex-shrink: 0;
 }
 
 @keyframes fade-up {

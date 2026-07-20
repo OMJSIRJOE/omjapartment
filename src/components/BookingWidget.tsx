@@ -191,8 +191,8 @@ export default function BookingWidget({
         </span>
       </div>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-2">
-        <label className="block">
+      <div className="mt-6 grid min-w-0 gap-3 sm:grid-cols-2">
+        <label className="block min-w-0">
           <span className="mb-1.5 block text-[10px] tracking-[0.18em] text-navy/50 uppercase">
             Check-in
           </span>
@@ -205,7 +205,7 @@ export default function BookingWidget({
             className="field"
           />
         </label>
-        <label className="block">
+        <label className="block min-w-0">
           <span className="mb-1.5 block text-[10px] tracking-[0.18em] text-navy/50 uppercase">
             Check-out
           </span>
