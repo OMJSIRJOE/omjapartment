@@ -3,24 +3,31 @@ import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
+function clean(value: string) {
+  // Strip BOM / accidental newlines from env-sync tools (common PowerShell pipe issue)
+  return value.replace(/^\uFEFF/, "").trim();
+}
+
 function resolveConnectionString() {
   // Prefer discrete Neon vars — more reliable than a full URL that can get mangled in env sync
-  const user = process.env.PGUSER || process.env.POSTGRES_USER || "neondb_owner";
-  const password = process.env.PGPASSWORD || process.env.POSTGRES_PASSWORD;
-  const host = process.env.PGHOST || process.env.POSTGRES_HOST;
-  const database = process.env.PGDATABASE || process.env.POSTGRES_DATABASE || "neondb";
+  const user = clean(process.env.PGUSER || process.env.POSTGRES_USER || "neondb_owner");
+  const passwordRaw = process.env.PGPASSWORD || process.env.POSTGRES_PASSWORD;
+  const hostRaw = process.env.PGHOST || process.env.POSTGRES_HOST;
+  const database = clean(process.env.PGDATABASE || process.env.POSTGRES_DATABASE || "neondb");
 
-  if (password && host) {
+  if (passwordRaw && hostRaw) {
+    const password = clean(passwordRaw);
+    const host = clean(hostRaw);
     return `postgresql://${encodeURIComponent(user)}:${encodeURIComponent(password)}@${host}/${database}?sslmode=require`;
   }
 
-  const url = process.env.DATABASE_URL || process.env.POSTGRES_PRISMA_URL || process.env.POSTGRES_URL;
-  if (!url) {
+  const urlRaw = process.env.DATABASE_URL || process.env.POSTGRES_PRISMA_URL || process.env.POSTGRES_URL;
+  if (!urlRaw) {
     throw new Error("DATABASE_URL (or PGHOST/PGPASSWORD) is not set");
   }
 
   // channel_binding breaks some serverless drivers
-  return url.replace(/([?&])channel_binding=[^&]*&?/g, "$1").replace(/[?&]$/, "");
+  return clean(urlRaw).replace(/([?&])channel_binding=[^&]*&?/g, "$1").replace(/[?&]$/, "");
 }
 
 function createPrismaClient() {
