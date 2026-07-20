@@ -1,6 +1,18 @@
+function resolveSiteUrl() {
+  const raw = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").trim();
+  const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+  try {
+    const url = new URL(withProtocol);
+    // Strip trailing slash for consistent absolute URLs
+    return url.origin;
+  } catch {
+    return "http://localhost:3000";
+  }
+}
+
 export const siteConfig = {
   name: process.env.NEXT_PUBLIC_BUSINESS_NAME || "OMJ Apartment",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  siteUrl: resolveSiteUrl(),
   whatsapp: (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "2348133756976").replace(/\D/g, ""),
   phone: process.env.NEXT_PUBLIC_PHONE || "+234 813 375 6976",
   email: process.env.NEXT_PUBLIC_EMAIL || "hello@omjapartment.com",
