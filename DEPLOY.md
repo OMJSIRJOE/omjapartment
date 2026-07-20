@@ -9,26 +9,21 @@ GitHub repo: https://github.com/OMJSIRJOE/omjapartment
 3. Import **omjapartment**
 4. **Do not deploy yet** — first add a database (step 2), then env vars (step 3)
 
-## 2. Add Postgres (required)
+## 2. Add Postgres (required) — DONE if you see DATABASE_URL in Vercel
 
-SQLite will not work on Vercel. Use Neon:
+Neon is connected when **Settings → Environment Variables** shows `DATABASE_URL` (and usually `DATABASE_URL_UNPOOLED`).
 
-1. In the Vercel project → **Storage** → **Create Database** → **Neon**
-2. Create it and connect to this project  
-   Vercel will set `DATABASE_URL` (and often `POSTGRES_URL`) automatically
-
-Then in this repo, switch Prisma to Postgres (one-time):
-
-In `prisma/schema.prisma`:
+Prisma is configured for Postgres:
 
 ```prisma
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 ```
 
-Commit + push that change (I can do this for you right after Neon is connected).
+After that change is on `master`, Vercel will redeploy. Then create tables + seed (see below).
 
 ## 3. Environment variables (Vercel → Settings → Environment Variables)
 
