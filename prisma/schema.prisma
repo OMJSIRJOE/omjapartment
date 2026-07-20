@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Property {
+  id            String        @id @default(cuid())
+  slug          String        @unique
+  title         String
+  location      String
+  city          String
+  address       String
+  bedrooms      Int
+  bathrooms     Int
+  area          Int
+  pricePerNight Int
+  cleaningFee   Int
+  maxGuests     Int
+  minNights     Int           @default(1)
+  rating        Float         @default(5)
+  reviewCount   Int           @default(0)
+  featured      Boolean       @default(false)
+  active        Boolean       @default(true)
+  description   String
+  amenities     String
+  houseRules    String
+  images        String
+  checkInNotes  String        @default("")
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  bookings      Booking[]
+  blockedDates  BlockedDate[]
+}
+
+model Booking {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  propertyId  String
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  guestName   String
+  guestEmail  String
+  guestPhone  String
+  checkIn     DateTime
+  checkOut    DateTime
+  guests      Int
+  nights      Int
+  subtotal    Int
+  cleaningFee Int
+  total       Int
+  currency    String   @default("NGN")
+  status      String   @default("pending")
+  paystackRef String?  @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([propertyId, checkIn, checkOut])
+  @@index([status])
+}
+
+model BlockedDate {
+  id         String   @id @default(cuid())
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  date       DateTime
+  reason     String?
+  createdAt  DateTime @default(now())
+
+  @@unique([propertyId, date])
+  @@index([propertyId, date])
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String   @default("Admin")
+  createdAt    DateTime @default(now())
+}
