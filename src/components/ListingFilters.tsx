@@ -35,7 +35,19 @@ export default function ListingFilters({
       if (location && property.location !== location) return false;
       if (guests && property.maxGuests < Number(guests)) return false;
       if (maxPrice && property.pricePerNight > Number(maxPrice)) return false;
-      if (bedrooms && property.bedrooms !== Number(bedrooms)) return false;
+      if (bedrooms) {
+        if (bedrooms === "studio") {
+          const isStudio =
+            property.bedrooms === 0 || /studio/i.test(property.title);
+          if (!isStudio) return false;
+        } else if (bedrooms === "duplex") {
+          if (property.bedrooms !== 4 && property.bedrooms !== 5) return false;
+        } else if (bedrooms === "1") {
+          if (property.bedrooms !== 1 || /studio/i.test(property.title)) return false;
+        } else if (property.bedrooms !== Number(bedrooms)) {
+          return false;
+        }
+      }
       return true;
     });
   }, [properties, location, guests, maxPrice, bedrooms]);
@@ -103,9 +115,11 @@ export default function ListingFilters({
               className="field"
             >
               <option value="">Any</option>
-              <option value="1">Studio / 1 bed</option>
+              <option value="studio">Studio</option>
+              <option value="1">1 bed</option>
               <option value="2">2 beds</option>
               <option value="3">3 beds</option>
+              <option value="duplex">4/5 bed duplex</option>
               <option value="4">4 beds</option>
               <option value="5">5 beds</option>
             </select>

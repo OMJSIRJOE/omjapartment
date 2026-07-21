@@ -64,7 +64,9 @@ export default function PropertyCard({
           <div className="mt-4 flex flex-wrap gap-4 border-t border-navy/8 pt-4 text-xs tracking-wide text-navy/65 uppercase">
             <span className="flex items-center gap-1.5">
               <BedIcon className="h-4 w-4 text-gold" />
-              {property.bedrooms} Beds
+              {property.bedrooms === 0 || /studio/i.test(property.title)
+                ? "Studio"
+                : `${property.bedrooms} Beds`}
             </span>
             <span className="flex items-center gap-1.5">
               <GuestsIcon className="h-4 w-4 text-gold" />

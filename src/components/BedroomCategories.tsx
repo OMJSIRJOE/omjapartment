@@ -1,34 +1,65 @@
 import Link from "next/link";
 import PropertyCard from "@/components/PropertyCard";
 import { ArrowRightIcon } from "@/components/icons";
-import { getPropertiesByBedrooms } from "@/lib/properties";
+import {
+  getOneBedProperties,
+  getPropertiesByBedroomValues,
+  getPropertiesByBedrooms,
+  getStudioProperties,
+} from "@/lib/properties";
+import { Property } from "@/types/property";
 
-const categories = [
+type Category = {
+  id: string;
+  title: string;
+  subtitle: string;
+  href: string;
+  load: () => Promise<Property[]>;
+};
+
+const categories: Category[] = [
   {
-    bedrooms: 1,
+    id: "studio",
     title: "Studio Apartment",
     subtitle: "Compact, stylish shortlets for solo travelers and couples.",
-    href: "/listings?bedrooms=1",
+    href: "/listings?bedrooms=studio",
+    load: getStudioProperties,
   },
   {
-    bedrooms: 2,
+    id: "1bed",
+    title: "1 Bed Apartment",
+    subtitle: "Comfortable one-bedroom stays with space to work and unwind.",
+    href: "/listings?bedrooms=1",
+    load: getOneBedProperties,
+  },
+  {
+    id: "2bed",
     title: "2 Bed Apartment",
     subtitle: "Spacious two-bedroom stays for friends and small families.",
     href: "/listings?bedrooms=2",
+    load: () => getPropertiesByBedrooms(2),
   },
   {
-    bedrooms: 3,
+    id: "3bed",
     title: "3 Bed Apartment",
     subtitle: "Roomy three-bedroom homes for longer Lagos getaways.",
     href: "/listings?bedrooms=3",
+    load: () => getPropertiesByBedrooms(3),
   },
-] as const;
+  {
+    id: "duplex",
+    title: "4/5 Bed Duplex",
+    subtitle: "Premium duplexes and large homes for groups and family stays.",
+    href: "/listings?bedrooms=duplex",
+    load: () => getPropertiesByBedroomValues([4, 5]),
+  },
+];
 
 export default async function BedroomCategories() {
   const sections = await Promise.all(
     categories.map(async (category) => ({
       ...category,
-      properties: (await getPropertiesByBedrooms(category.bedrooms)).slice(0, 3),
+      properties: (await category.load()).slice(0, 3),
     })),
   );
 
@@ -36,7 +67,7 @@ export default async function BedroomCategories() {
     <section className="section-pad relative bg-white">
       <div className="mx-auto max-w-7xl space-y-20 px-5 md:px-8">
         {sections.map((section) => (
-          <div key={section.bedrooms}>
+          <div key={section.id}>
             <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
               <div>
                 <p className="text-xs tracking-[0.22em] text-gold-dark uppercase">Browse by type</p>
@@ -62,7 +93,7 @@ export default async function BedroomCategories() {
                   <PropertyCard
                     key={property.id}
                     property={property}
-                    priority={index === 0 && section.bedrooms === 1}
+                    priority={index === 0 && section.id === "studio"}
                   />
                 ))}
               </div>
